@@ -1,0 +1,51 @@
+<head>
+  <title>Media Share</title>
+</head>
+
+<body>
+  <nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="#">Home</a></li>
+      <li><a href="#">Images</a></li>
+      <li><a href="#">Videos</a></li>
+      <li><a href="#">Articles</a></li>
+    </ul>
+  </div>
+  </nav>
+
+    <form class="js-new-task">
+      <input type="text" name="text" placeholder="Type to add new task" />
+    </form>
+
+     <form class="js-add-image">
+        <input type="text" name="img_src"/>
+        <input type="text" name="img_alt"/>
+        <button class="btn btn-success">save</button>
+    </form>
+
+    {{#each events}}
+  	 {{>task}}
+    {{/each}}
+    {{>images}}
+</body>
+
+<template name="task">
+  <li class="{{# if checked}}checked{{/if}}">
+    <button class="delete">&times;</button>
+    <input type="checkbox" checked="{{checked}}" class="toggle-checked" />
+    <span class="text">{{text}}</span>
+  </li>
+</template>
+
+<template name="images">
+  <div class="row">
+    {{#each images}}
+      <div class="col-xs-12 col-md-3">
+        <div class="thumbnail">
+          <img class="js-image" src="{{img_src}}">
+        </div>
+      </div>
+    {{/each}}
+  </div>
+</template>
