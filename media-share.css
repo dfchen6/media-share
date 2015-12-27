@@ -2,3 +2,16 @@
 .js-new-task {
 	padding-top: 50px;
 }
+
+.thumbnail {
+	max-height: 400px;
+	min-height: 400px;
+}
+
+.imageEdit {
+	float: left;
+}
+
+.imageDelete {
+	float: right;
+}

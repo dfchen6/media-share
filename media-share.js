@@ -5,26 +5,18 @@ Articles = new Mongo.Collection("articles");
 
 if (Meteor.isClient) {
   // counter starts at 0
-
-  Template.body.helpers({
-    events: function(){
-      return Tasks.find({}, {sort: {createdAt: -1}});
-    }
+  Router.map(function () {
+  this.route('images');
+  this.route('videos');
+  this.route('articles');
+  this.route('home', {
+    path: '/',  //overrides the default '/home'
   });
+});
 
-  Template.body.events({
-    "submit .js-new-task": function(event){
-      event.preventDefault();
-      var text = event.target.text.value;
-      console.log(text);
-      Tasks.insert({
-        text: text,
-        createdAt: new Date()
-      });
-      console.log("Add to " + Tasks.find().count());
-      event.target.text.value = "";
-    },
-     "submit .js-add-image": function(event){
+
+  Template.newImage.events({
+    "submit .js-add-image": function(event){
       console.log("Hehe");
       var img_src = event.target.img_src.value;
       var img_alt = event.target.img_alt.value;
@@ -37,19 +29,48 @@ if (Meteor.isClient) {
     }
   });
 
+  Template.newVideo.events({
+      "submit .js-add-video": function(event){
+        var video_src = event.target.video_src.value;
+        var video_alt = event.target.video_alt.value;
+        Videos.insert({
+        video_src: video_src,
+        video_alt: video_alt,
+        createdAt: new Date()
+      });
+        console.log("new video");
+      }
+  });
 
-  Template.task.events({
-    "click .toggle-checked": function(){
-      Tasks.update(this._id, {$set: {checked: ! this.checked}});
-    },
-    "click .delete": function (){
-      Tasks.remove(this._id);
+  Template.images.events({
+    "click .imageDelete": function() {
+      var image_id = this._id;
+      $("#" + image_id).hide('slow', function(){
+        Images.remove(this._id);
+      })
+      Images.remove(this._id);
+    }
+  });
+
+    Template.videos.events({
+    "click .videoDelete": function() {
+      var video_id = this._id;
+      $("#" + video_id).hide('slow', function(){
+        Videos.remove(this._id);
+      })
+      Videos.remove(this._id);
     }
   });
 
   Template.images.helpers({
     images: function(){
       return Images.find({}, {sort: {createdAt: -1}});
+    }
+  });
+
+  Template.videos.helpers({
+    videos: function(){
+      return Videos.find({}, {sort: {createdAt: -1}});
     }
   });
 }
