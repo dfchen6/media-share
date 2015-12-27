@@ -4,6 +4,24 @@ Videos = new Mongo.Collection("videos");
 Articles = new Mongo.Collection("articles");
 
 if (Meteor.isClient) {
+
+  Session.set("imageLimit", 8);
+
+  lastScrollTop = 0;
+
+  $(window).scroll(function(event){
+    if($(window).scrollTop() + $(window).height() > $(document).height() -100 ){
+      var scrollTop = $(this).scrollTop();
+      if(scrollTop > lastScrollTop){
+        Session.set("imageLimit", Session.get("imageLimit") + 4);
+      }
+    }
+  });
+
+  Accounts.ui.config({
+    passwordSignupFields: "USERNAME_AND_EMAIL"
+  });
+
   // counter starts at 0
   Router.map(function () {
   this.route('images');
@@ -14,17 +32,19 @@ if (Meteor.isClient) {
   });
 });
 
-
   Template.newImage.events({
     "submit .js-add-image": function(event){
       console.log("Hehe");
       var img_src = event.target.img_src.value;
       var img_alt = event.target.img_alt.value;
+      if(Meteor.user()){
       Images.insert({
         img_src: img_src,
         img_alt: img_alt,
-        createdAt: new Date()
+        createdAt: new Date(),
+        createdBy: Meteor.user()._id
       });
+      }
       console.log("Images have " + Images.find().count());
     }
   });
@@ -36,7 +56,8 @@ if (Meteor.isClient) {
         Videos.insert({
         video_src: video_src,
         video_alt: video_alt,
-        createdAt: new Date()
+        createdAt: new Date(),
+        createdBy: Meteor.user()._id
       });
         console.log("new video");
       }
@@ -45,10 +66,20 @@ if (Meteor.isClient) {
   Template.images.events({
     "click .imageDelete": function() {
       var image_id = this._id;
-      $("#" + image_id).hide('slow', function(){
+      // $("#" + image_id).hide('slow', function(){
+      //   Images.remove(this._id);
+      // })
+      var toBeDeletedImage = Images.findOne({_id:image_id});
+      var currentUserId = Meteor.user()._id;
+      if(toBeDeletedImage.createdBy == currentUserId) {
         Images.remove(this._id);
-      })
-      Images.remove(this._id);
+      }
+    },
+    "click .js-set-image-filter": function(event) {
+      Session.set("userFilter", this.createdBy);
+    },
+    "click .js-remove-filter": function(event) {
+      Session.set("userFilter", null);
     }
   });
 
@@ -64,7 +95,39 @@ if (Meteor.isClient) {
 
   Template.images.helpers({
     images: function(){
-      return Images.find({}, {sort: {createdAt: -1}});
+      if (Session.get("userFilter")){
+        return Images.find({createdBy: Session.get("userFilter")}, {sort: {createdAt: -1}});
+      }else {
+        return Images.find({}, {sort: {createdAt: -1}, limit: Session.get("imageLimit")});
+      }
+    },
+    getUser: function(user_id){
+      var user = Meteor.users.findOne({_id:user_id});
+      if(user){
+        return user.username;
+      }else{
+        return "anon";
+      }
+    },
+    filtering_images: function(){
+      if (Session.get("userFilter")){
+        return true;
+    }
+    else{
+        return false;
+    }
+    }
+  });
+
+  Template.body.helpers({
+    myUsername: function(){
+    if (Meteor.user()){
+      return Meteor.user().username;
+    }
+    else{
+      console.log("Visitor");
+      return "Visitor";
+    }
     }
   });
 

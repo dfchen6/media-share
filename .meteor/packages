@@ -22,3 +22,5 @@ bootstrap
 twbs:bootstrap
 templates:tabs
 iron:router
+accounts-ui
+accounts-password

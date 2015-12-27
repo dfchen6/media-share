@@ -8,10 +8,23 @@
 	min-height: 400px;
 }
 
+.js-image {
+	max-height: 250px;
+}
+
 .imageEdit {
 	float: left;
 }
 
 .imageDelete {
 	float: right;
+}
+
+.welcome {
+	padding-top: 50px;
+}
+
+.row {
+    margin-right: 100px;
+    margin-left: 100px;
 }

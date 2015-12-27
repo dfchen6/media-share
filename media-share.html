@@ -3,7 +3,7 @@
 </head>
 
 <body>
-    {{>newImage}}
+    <h1 class = "welcome"> Welcome to our site, {{myUsername}}!</h1>
     {{>layout}}
 </body>
 
@@ -17,13 +17,21 @@
 
 
 <template name="images">
+  {{#if currentUser}}
   {{>newImage}}
+  {{/if}}
+  <h2>
+    {{#if filtering_images}}
+      Images are filtered, <a href="#" class="js-remove-filter">remove filter</a>
+    {{/if}}
+  </h2>
   <div class="row">
     {{#each images}}
       <div class="col-xs-12 col-md-3" id="{{_id}}">
         <div class="thumbnail">
           <img class="js-image" src="{{img_src}}">
           <br>
+          <p>Shared by <a href="#" class="js-set-image-filter"> {{getUser(createdBy)}} </a></p>
           <button class="btn btn-success imageEdit">Edit</button>
           <button class="btn btn-warning imageDelete">Delete</button>
         </div>
@@ -67,6 +75,7 @@
       <li><a href="/images">Images</a></li>
       <li><a href="/videos">Videos</a></li>
       <li><a href="/articles">Articles</a></li>
+      <li>{{>loginButtons}}</li>
     </ul>
   </div>
   </nav>
