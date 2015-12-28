@@ -1,11 +1,4 @@
-Tasks = new Mongo.Collection("tasks");
-Images = new Mongo.Collection("images");
-Videos = new Mongo.Collection("videos");
-Articles = new Mongo.Collection("articles");
-
-if (Meteor.isClient) {
-
-  Session.set("imageLimit", 8);
+ Session.set("imageLimit", 8);
 
   lastScrollTop = 0;
 
@@ -46,6 +39,24 @@ if (Meteor.isClient) {
       });
       }
       console.log("Images have " + Images.find().count());
+    },
+    "click .btn-toggle": function(){
+      console.log("Hello");
+      if($('#closeButton').hasClass('btn-primary')){
+        $('#closeButton').removeClass('btn-primary');
+        $('#closeButton').removeClass('active');
+        $('#closeButton').addClass('btn-default');
+        $('#openButton').removeClass('btn-default');
+        $('#openButton').addClass('active');        
+        $('#openButton').addClass('btn-primary');      }
+      else{
+        $('#openButton').removeClass('btn-primary');
+        $('#openeButton').removeClass('active');
+        $('#openButton').addClass('btn-default');
+        $('#closeButton').removeClass('btn-default');
+        $('#closeButton').addClass('active');        
+        $('#closeButton').addClass('btn-primary');
+      }
     }
   });
 
@@ -136,10 +147,3 @@ if (Meteor.isClient) {
       return Videos.find({}, {sort: {createdAt: -1}});
     }
   });
-}
-
-if (Meteor.isServer) {
-  Meteor.startup(function () {
-    // code to run on server at startup
-  });
-}

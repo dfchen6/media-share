@@ -18,6 +18,9 @@
 
 .imageDelete {
 	float: right;
+	position: absolute;
+	top: 86%;
+	right: 8%;
 }
 
 .welcome {
@@ -27,4 +30,25 @@
 .row {
     margin-right: 100px;
     margin-left: 100px;
+}
+
+.js-add-image {
+	margin-right: 120px;
+	margin-left: 120px;
+}
+
+.btn-toggle {
+	margin-right: 120px;
+	margin-left: 120px;
+	margin-top: 80px;
+}
+
+.row {
+	margin-top: 60px;
+}
+
+.login-buttons-dropdown-align- {
+	margin-top: 12px;
+	font-size: medium;
+	padding-left: 10px;
 }
